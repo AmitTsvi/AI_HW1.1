@@ -52,7 +52,7 @@ def plot_distance_and_expanded_wrt_weight_figure(
     # Create another axis for the #expanded curve.
     ax2 = ax1.twinx()
 
-    # TODO: Plot the total expanded with ax2. Use `ax2.plot(...)`.
+    # TODO: Plot the total expanded with ax2. Use `ax2.plot(...)`.m
     # TODO: ax2: Make the y-axis label, ticks and tick labels match the line color.
     # TODO: Make this curve colored red with solid line style.
     # TODO: Set its label to be '#Expanded states'.
