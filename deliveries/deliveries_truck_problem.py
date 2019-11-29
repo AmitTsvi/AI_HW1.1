@@ -50,13 +50,19 @@ class DeliveriesTruckState(GraphProblemState):
         This method is used to determine whether two given state objects represent the same state.
         """
         assert isinstance(other, DeliveriesTruckState)
+        if self.current_location != other.current_location:
+            return False
+        if self.loaded_deliveries != other.loaded_deliveries:
+            return False
+        if self.dropped_deliveries != other.dropped_deliveries:
+            return False
+        return True
 
         # TODO [Ex.15]: Complete the implementation of this method!
         #  Note that you can simply compare two instances of `Junction` type
         #   (using equals `==` operator) because the class `Junction` explicitly
         #   implements the `__eq__()` method. The types `frozenset` and `Delivery`
         #   are also comparable (in the same manner).
-        raise NotImplementedError()  # TODO: remove this line.
 
     def __hash__(self):
         """
@@ -76,7 +82,7 @@ class DeliveriesTruckState(GraphProblemState):
          Notice that `sum()` can receive an *ITERATOR* as argument; That is, you can simply write something like this:
         >>> sum(<some expression using item> for item in some_collection_of_items)
         """
-        raise NotImplementedError()  # TODO: remove this line.
+        return sum(delivery.nr_packages for delivery in self.loaded_deliveries)
 
 
 @dataclass(frozen=True)
@@ -181,9 +187,27 @@ class DeliveriesTruckProblem(GraphProblem):
               expect this type).
             - Other fields of the state and the problem input.
         """
-
         assert isinstance(state_to_expand, DeliveriesTruckState)
-        raise NotImplementedError()  # TODO: remove this line!
+        for delivery in self.get_deliveries_waiting_to_pick(state_to_expand):
+            if self.problem_input.delivery_truck.max_nr_loaded_packages - \
+                    state_to_expand.get_total_nr_packages_loaded() >= delivery.nr_packages:
+                continue
+            if delivery in state_to_expand.loaded_deliveries or\
+                    delivery in state_to_expand.dropped_deliveries:
+                continue
+            new_loaded = FrozenSet(Set(state_to_expand.loaded_deliveries).add(delivery))
+            succ_state = DeliveriesTruckState(new_loaded, state_to_expand.dropped_deliveries, delivery.pick_location)
+            cost = self.map_distance_finder.get_map_cost_between(state_to_expand.current_location,
+                                                                 delivery.pick_location)
+            yield OperatorResult(succ_state, cost, 'pick ' + delivery.client_name)
+
+        for delivery in state_to_expand.loaded_deliveries:
+            new_loaded = FrozenSet(Set(state_to_expand.loaded_deliveries).remove(delivery))
+            new_dropped = FrozenSet(Set(state_to_expand.dropped_deliveries).add(delivery))
+            succ_state = DeliveriesTruckState(new_loaded, new_dropped, delivery.pick_location)
+            cost = self.map_distance_finder.get_map_cost_between(state_to_expand.current_location,
+                                                                 delivery.drop_location)
+            yield OperatorResult(succ_state, cost, 'drop ' + delivery.client_name)
 
     def is_goal(self, state: GraphProblemState) -> bool:
         """
@@ -191,7 +215,12 @@ class DeliveriesTruckProblem(GraphProblem):
         TODO [Ex.15]: implement this method!
         """
         assert isinstance(state, DeliveriesTruckState)
-        raise NotImplementedError()  # TODO: remove the line!
+        if state.dropped_deliveries == self.problem_input.deliveries:
+            return False
+        if not state.loaded_deliveries:
+            return False
+        if state.current_location in [delivery.drop_location for delivery in self.problem_input.deliveries]:
+            return True
 
     def _calc_map_road_cost(self, link: Link) -> DeliveryCost:
         """
@@ -254,7 +283,7 @@ class DeliveriesTruckProblem(GraphProblem):
                 generated set.
             Note: This method can be implemented using a single line of code.
         """
-        raise NotImplementedError()  # TODO: remove this line!
+        return set(self.problem_input.deliveries).difference(state.loaded_deliveries, state.dropped_deliveries)
 
     def get_all_junctions_in_remaining_truck_path(self, state: DeliveriesTruckState) -> Set[Junction]:
         """

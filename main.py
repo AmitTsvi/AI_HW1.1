@@ -53,6 +53,7 @@ def plot_distance_and_expanded_wrt_weight_figure(
     ax2 = ax1.twinx()
 
     # TODO: Plot the total expanded with ax2. Use `ax2.plot(...)`.m
+
     # TODO: ax2: Make the y-axis label, ticks and tick labels match the line color.
     # TODO: Make this curve colored red with solid line style.
     # TODO: Set its label to be '#Expanded states'.
@@ -152,7 +153,9 @@ def basic_deliveries_truck_problem_experiments():
     # Ex.16
     # TODO: create an instance of `UniformCost`, solve the `small_delivery_problem_with_distance_cost`
     #       with it and print the results.
-    exit()  # TODO: remove!
+    uc = UniformCost()
+    solution = uc.solve_problem(small_delivery_problem_with_distance_cost)
+    print(solution)
 
 
 def deliveries_truck_problem_with_astar_experiments():
