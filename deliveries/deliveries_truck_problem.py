@@ -190,21 +190,22 @@ class DeliveriesTruckProblem(GraphProblem):
         assert isinstance(state_to_expand, DeliveriesTruckState)
         for delivery in self.get_deliveries_waiting_to_pick(state_to_expand):
             if self.problem_input.delivery_truck.max_nr_loaded_packages - \
-                    state_to_expand.get_total_nr_packages_loaded() >= delivery.nr_packages:
+                    state_to_expand.get_total_nr_packages_loaded() < delivery.nr_packages:
                 continue
-            if delivery in state_to_expand.loaded_deliveries or\
-                    delivery in state_to_expand.dropped_deliveries:
-                continue
-            new_loaded = FrozenSet(Set(state_to_expand.loaded_deliveries).add(delivery))
-            succ_state = DeliveriesTruckState(new_loaded, state_to_expand.dropped_deliveries, delivery.pick_location)
+            new_loaded = set(state_to_expand.loaded_deliveries)
+            new_loaded.add(delivery)
+            succ_state = DeliveriesTruckState(frozenset(new_loaded), state_to_expand.dropped_deliveries,
+                                              delivery.pick_location)
             cost = self.map_distance_finder.get_map_cost_between(state_to_expand.current_location,
                                                                  delivery.pick_location)
             yield OperatorResult(succ_state, cost, 'pick ' + delivery.client_name)
 
         for delivery in state_to_expand.loaded_deliveries:
-            new_loaded = FrozenSet(Set(state_to_expand.loaded_deliveries).remove(delivery))
-            new_dropped = FrozenSet(Set(state_to_expand.dropped_deliveries).add(delivery))
-            succ_state = DeliveriesTruckState(new_loaded, new_dropped, delivery.pick_location)
+            new_loaded = set(state_to_expand.loaded_deliveries)
+            new_loaded.remove(delivery)
+            new_dropped = set(state_to_expand.dropped_deliveries)
+            new_dropped.add(delivery)
+            succ_state = DeliveriesTruckState(frozenset(new_loaded), frozenset(new_dropped), delivery.drop_location)
             cost = self.map_distance_finder.get_map_cost_between(state_to_expand.current_location,
                                                                  delivery.drop_location)
             yield OperatorResult(succ_state, cost, 'drop ' + delivery.client_name)
@@ -215,7 +216,7 @@ class DeliveriesTruckProblem(GraphProblem):
         TODO [Ex.15]: implement this method!
         """
         assert isinstance(state, DeliveriesTruckState)
-        if state.dropped_deliveries == self.problem_input.deliveries:
+        if state.dropped_deliveries != self.problem_input.deliveries:
             return False
         if not state.loaded_deliveries:
             return False
