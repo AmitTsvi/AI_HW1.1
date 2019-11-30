@@ -47,7 +47,10 @@ class TruckDeliveriesMaxAirDistHeuristic(HeuristicFunction):
         if len(all_junctions_in_remaining_truck_path) < 2:
             return 0
 
-        total_distance_lower_bound = 10  # TODO: modify this line.
+        total_distance_lower_bound = max(self.cached_air_distance_calculator.get_air_distance_between_junctions(j1, j2)
+                                         for j1 in all_junctions_in_remaining_truck_path
+                                         for j2 in all_junctions_in_remaining_truck_path
+                                         if j1 != j2)
 
         return self.problem.get_cost_lower_bound_from_distance_lower_bound(total_distance_lower_bound)
 
@@ -82,7 +85,17 @@ class TruckDeliveriesSumAirDistHeuristic(HeuristicFunction):
         if len(all_junctions_in_remaining_truck_path) < 2:
             return 0
 
-        total_cost_of_greedily_built_path = 10  # TODO: modify this line and complete the missing implementation here.
+        total_cost_of_greedily_built_path = 0
+        current_junction = state.current_location
+        all_junctions_in_remaining_truck_path.remove(state.current_location)
+        while all_junctions_in_remaining_truck_path:
+            closest = min(all_junctions_in_remaining_truck_path,
+                          key=lambda x:
+                          self.cached_air_distance_calculator.get_air_distance_between_junctions(current_junction, x))
+            total_cost_of_greedily_built_path += \
+                self.cached_air_distance_calculator.get_air_distance_between_junctions(current_junction, closest)
+            current_junction = closest
+            all_junctions_in_remaining_truck_path.remove(closest)
 
         return self.problem.get_cost_lower_bound_from_distance_lower_bound(total_cost_of_greedily_built_path)
 

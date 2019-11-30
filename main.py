@@ -167,12 +167,14 @@ def deliveries_truck_problem_with_astar_experiments():
     # Ex.18
     # TODO: create an instance of `AStar` with the `TruckDeliveriesMaxAirDistHeuristic`,
     #       solve the `moderate_delivery_problem_with_distance_cost` with it and print the results.
-    exit()  # TODO: remove!
+    astar_ex_18 = AStar(TruckDeliveriesMaxAirDistHeuristic(moderate_delivery_problem_with_distance_cost))
+    astar_ex_18.solve_problem(moderate_delivery_problem_with_distance_cost)
 
     # Ex.21
     # TODO: create an instance of `AStar` with the `TruckDeliveriesSumAirDistHeuristic`,
     #       solve the `moderate_delivery_problem_with_distance_cost` with it and print the results.
-    exit()  # TODO: remove!
+    astar_ex_21 = AStar(TruckDeliveriesSumAirDistHeuristic(moderate_delivery_problem_with_distance_cost))
+    astar_ex_21.solve_problem(moderate_delivery_problem_with_distance_cost)
 
     # Ex.24
     # TODO: create an instance of `AStar` with the `TruckDeliveriesMSTAirDistHeuristic`,
