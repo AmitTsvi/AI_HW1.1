@@ -42,7 +42,7 @@ def plot_distance_and_expanded_wrt_weight_figure(
     # See documentation here:
     # https://matplotlib.org/2.0.0/api/_as_gen/matplotlib.axes.Axes.plot.html
     # You can also Google for additional examples.
-    ax1.plot(weights, total_cost,  'b-', label='Solution cost')
+    p1, = ax1.plot(weights, total_cost,  'b-', label='Solution cost')
 
     # ax1: Make the y-axis label, ticks and tick labels match the line color.
     ax1.set_ylabel('solution cost', color='b')
@@ -53,7 +53,7 @@ def plot_distance_and_expanded_wrt_weight_figure(
     ax2 = ax1.twinx()
 
     # TODO: Plot the total expanded with ax2. Use `ax2.plot(...)`.m
-    ax2.plot(weights, total_nr_expanded, 'r-', label='#Expanded states')
+    p2, =ax2.plot(weights, total_nr_expanded, 'r-', label='#Expanded states')
 
     # TODO: ax2: Make the y-axis label, ticks and tick labels match the line color.
     # TODO: Make this curve colored red with solid line style.
@@ -61,9 +61,6 @@ def plot_distance_and_expanded_wrt_weight_figure(
     ax2.set_ylabel('#Expanded states', color='r')
     ax2.tick_params('y', colors='r')
     #ax2.set_xlabel('weight')
-
-    p1 = ax1
-    p2 = ax2
 
     curves = [p1, p2]
     ax1.legend(curves, [curve.get_label() for curve in curves])
@@ -271,8 +268,9 @@ def deliveries_truck_problem_with_astar_epsilon_experiments():
     #       solve the `moderate_delivery_problem_with_distance_cost` with it and print the results.
     #       use focal_epsilon=0.03, and  max_focal_size=40.
     #       use within_focal_priority_function=within_focal_h_sum_priority_function
-    exit()  # TODO: remove!
-
+    astarEpsilon = AStarEpsilon(TruckDeliveriesMSTAirDistHeuristic, within_focal_h_sum_priority_function, 0.03, 40)
+    res = astarEpsilon.solve_problem(moderate_delivery_problem_with_distance_cost)
+    print(res)
 
 def deliveries_truck_problem_anytime_astar_experiments():
     print()
