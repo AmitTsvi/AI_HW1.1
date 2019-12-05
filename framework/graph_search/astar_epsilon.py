@@ -69,4 +69,39 @@ class AStarEpsilon(AStar):
          for the extracted (and returned) node.
         """
 
-        raise NotImplementedError()  # TODO: remove this line!
+        if self.open.is_empty():
+            return None
+        # finding the maximum expanding-priority of the FOCAL (=which is
+        #          the min expanding-priority in open multiplied by (1 + eps))
+        new_open = set()
+        min_open_expand_priority = self.open.peek_next_node().expanding_priority
+        while self.open.__len__() != 0:
+            curr_node = self.open.pop_next_node()
+            if curr_node.expanding_priority < min_open_expand_priority:
+                min_open_expand_priority = curr_node.expanding_priority
+            new_open.add(curr_node)
+        max_focal_expand_priority=min_open_expand_priority*(1 + self.focal_epsilon)
+
+        #creating focal list
+        focal_list = []
+        array_focal_priority_values = []
+        for next_node in new_open:
+            if (len(focal_list) < self.max_focal_size) and (next_node.expanding_priority <= max_focal_expand_priority):
+                focal_list.append(next_node)
+                priority_value = self.within_focal_priority_function(next_node, problem, self)
+                array_focal_priority_values.append(priority_value)
+            else:
+                self.open.push_node(next_node)
+
+        index_min = np.argmin(array_focal_priority_values)
+        node_to_expand = focal_list.pop(index_min)
+
+        #if self.max_nr_states_to_expand is not None and nr_expanded_states >= self.max_nr_states_to_expand:
+        #    exceeded_max_nr_expanded_states = True
+        #    break
+
+        for next_node in focal_list:
+            self.open.push_node(next_node)
+
+        return node_to_expand
+
