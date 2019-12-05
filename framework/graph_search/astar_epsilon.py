@@ -80,13 +80,14 @@ class AStarEpsilon(AStar):
             if curr_node.expanding_priority < min_open_expand_priority:
                 min_open_expand_priority = curr_node.expanding_priority
             new_open.add(curr_node)
-        max_focal_expand_priority=min_open_expand_priority*(1 + self.focal_epsilon)
+        max_focal_expand_priority = min_open_expand_priority*(1 + self.focal_epsilon)
 
         #creating focal list
         focal_list = []
         array_focal_priority_values = []
-        for next_node in new_open:
-            if (len(focal_list) < self.max_focal_size) and (next_node.expanding_priority <= max_focal_expand_priority):
+        while new_open.__len__() != 0:
+            next_node = new_open.pop()
+            if (len(focal_list) <= self.max_focal_size) and (next_node.expanding_priority <= max_focal_expand_priority):
                 focal_list.append(next_node)
                 priority_value = self.within_focal_priority_function(next_node, problem, self)
                 array_focal_priority_values.append(priority_value)
