@@ -190,7 +190,7 @@ class DeliveriesTruckProblem(GraphProblem):
         assert isinstance(state_to_expand, DeliveriesTruckState)
         for delivery in self.get_deliveries_waiting_to_pick(state_to_expand):
             if self.problem_input.delivery_truck.max_nr_loaded_packages - \
-                    state_to_expand.get_total_nr_packages_loaded() < delivery.nr_packages:
+                    state_to_expand.get_total_nr_packages_loaded() <= delivery.nr_packages:
                 continue
             new_loaded = set(state_to_expand.loaded_deliveries)
             new_loaded.add(delivery)
@@ -216,12 +216,13 @@ class DeliveriesTruckProblem(GraphProblem):
         TODO [Ex.15]: implement this method!
         """
         assert isinstance(state, DeliveriesTruckState)
-        if state.dropped_deliveries != self.problem_input.deliveries:
+        if state.dropped_deliveries != frozenset(self.problem_input.deliveries):
             return False
-        if not state.loaded_deliveries:
+        if len(state.loaded_deliveries) != 0:
             return False
-        if state.current_location in [delivery.drop_location for delivery in self.problem_input.deliveries]:
-            return True
+        if state.current_location not in [delivery.drop_location for delivery in self.problem_input.deliveries]:
+            return False
+        return True
 
     def _calc_map_road_cost(self, link: Link) -> DeliveryCost:
         """
