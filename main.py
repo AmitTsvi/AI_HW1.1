@@ -190,21 +190,23 @@ def deliveries_truck_problem_with_astar_experiments():
     # Ex.18
     # TODO: create an instance of `AStar` with the `TruckDeliveriesMaxAirDistHeuristic`,
     #       solve the `moderate_delivery_problem_with_distance_cost` with it and print the results.
-    astar_ex_18 = AStar(TruckDeliveriesMaxAirDistHeuristic(moderate_delivery_problem_with_distance_cost))
-    astar_ex_18.solve_problem(moderate_delivery_problem_with_distance_cost)
+    astar_ex_18 = AStar(TruckDeliveriesMaxAirDistHeuristic)
+    solution_18 = astar_ex_18.solve_problem(moderate_delivery_problem_with_distance_cost)
+    print(solution_18)
 
     # Ex.21
     # TODO: create an instance of `AStar` with the `TruckDeliveriesSumAirDistHeuristic`,
     #       solve the `moderate_delivery_problem_with_distance_cost` with it and print the results.
-    astar_ex_21 = AStar(TruckDeliveriesSumAirDistHeuristic(moderate_delivery_problem_with_distance_cost))
-    astar_ex_21.solve_problem(moderate_delivery_problem_with_distance_cost)
+    astar_ex_21 = AStar(TruckDeliveriesSumAirDistHeuristic)
+    solution_21 = astar_ex_21.solve_problem(moderate_delivery_problem_with_distance_cost)
+    print(solution_21)
 
     # Ex.24
     # TODO: create an instance of `AStar` with the `TruckDeliveriesMSTAirDistHeuristic`,
     #       solve the `moderate_delivery_problem_with_distance_cost` with it and print the results.
-    astar_ex_24 = AStar(TruckDeliveriesMSTAirDistHeuristic(moderate_delivery_problem_with_distance_cost))
-    astar_ex_24.solve_problem(moderate_delivery_problem_with_distance_cost)
-
+    astar_ex_24 = AStar(TruckDeliveriesMSTAirDistHeuristic)
+    solution_24 = astar_ex_24.solve_problem(moderate_delivery_problem_with_distance_cost)
+    print(solution_24)
 
 def deliveries_truck_problem_with_weighted_astar_experiments():
     print()
@@ -217,13 +219,13 @@ def deliveries_truck_problem_with_weighted_astar_experiments():
     # TODO: Call here the function `run_astar_for_weights_in_range()`
     #       with `TruckDeliveriesMSTAirDistHeuristic`
     #       over the `small_delivery_problem_with_distance_cost`.
-    exit()  # TODO: remove!
+    run_astar_for_weights_in_range(TruckDeliveriesMSTAirDistHeuristic, small_delivery_problem_with_distance_cost)
 
     # Ex.26
     # TODO: Call here the function `run_astar_for_weights_in_range()`
     #       with `TruckDeliveriesSumAirDistHeuristic`
     #       over the `moderate_delivery_problem_with_distance_cost`.
-    exit()  # TODO: remove!
+    run_astar_for_weights_in_range(TruckDeliveriesSumAirDistHeuristic, moderate_delivery_problem_with_distance_cost)
 
 
 def multiple_objectives_deliveries_truck_problem_experiments():

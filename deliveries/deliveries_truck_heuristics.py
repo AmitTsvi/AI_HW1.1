@@ -134,14 +134,11 @@ class TruckDeliveriesMSTAirDistHeuristic(HeuristicFunction):
                to calculate the air distance between the two junctions.
               Google for how to use `networkx` package for this purpose.
         """
-        all_junctions_in_remaining_truck_path = self.problem.get_all_junctions_in_remaining_truck_path(state)
-
-        if len(all_junctions_in_remaining_truck_path) < 2:
-            return 0
+        junctions_for_edges = junctions
         g = nx.Graph()
         g.add_nodes_from(junctions)
-        g.add_nodes_from({(j1, j2,
+        g.add_edges_from([(j1, j2,
                            {'weight': self.cached_air_distance_calculator.get_air_distance_between_junctions(j1, j2)})
-                          for j1 in all_junctions_in_remaining_truck_path
-                          for j2 in all_junctions_in_remaining_truck_path if j1 != j2})
+                          for j1 in junctions_for_edges
+                          for j2 in junctions_for_edges if j1 != j2])
         return nx.minimum_spanning_tree(g).size(weight='weight')
