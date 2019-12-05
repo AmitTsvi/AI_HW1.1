@@ -242,8 +242,9 @@ class DeliveriesTruckProblem(GraphProblem):
             optimization_objective=self.optimization_objective, max_driving_speed=link.max_speed)
         return DeliveryCost(
             distance_cost=link.distance,
-            time_cost=0,  # TODO: modify this value!
-            money_cost=0,  # TODO: modify this value!
+            time_cost=optimal_velocity*link.distance,
+            money_cost=link.distance*(gas_cost_per_meter +
+                                      int(link.is_toll_road)*self.problem_input.toll_road_cost_per_meter),
             optimization_objective=self.optimization_objective)
 
     def get_zero_cost(self) -> Cost:
@@ -270,10 +271,10 @@ class DeliveriesTruckProblem(GraphProblem):
         if self.optimization_objective == OptimizationObjective.Distance:
             return total_distance_lower_bound
         elif self.optimization_objective == OptimizationObjective.Time:
-            raise NotImplementedError()  # TODO: remove this line and complete the implementation of this case!
+            return self._calc_map_road_cost(Link(1, 2, total_distance_lower_bound, 0, MAX_ROAD_SPEED, False)).time_cost
         else:
             assert self.optimization_objective == OptimizationObjective.Money
-            raise NotImplementedError()  # TODO: remove this line and complete the implementation of this case!
+            return self._calc_map_road_cost(Link(1, 2, total_distance_lower_bound, 0, MAX_ROAD_SPEED, False)).money_cost
 
     def get_deliveries_waiting_to_pick(self, state: DeliveriesTruckState) -> Set[Delivery]:
         """

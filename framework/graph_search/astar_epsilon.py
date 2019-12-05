@@ -100,5 +100,6 @@ class AStarEpsilon(AStar):
         for next_node in focal_list:
             self.open.push_node(next_node)
 
+        self.close.add_node(node_to_expand)
         return node_to_expand
 

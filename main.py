@@ -238,12 +238,16 @@ def multiple_objectives_deliveries_truck_problem_experiments():
     # Ex.29
     # TODO: create an instance of `AStar` with the `TruckDeliveriesMSTAirDistHeuristic`,
     #       solve the `small_delivery_problem_with_time_cost` with it and print the results.
-    exit()  # TODO: remove!
+    astar_ex_29_1 = AStar(TruckDeliveriesMSTAirDistHeuristic)
+    astar_ex_29_1 = astar_ex_29_1.solve_problem(small_delivery_problem_with_time_cost)
+    print(astar_ex_29_1)
 
     # Ex.29
     # TODO: create an instance of `AStar` with the `TruckDeliveriesMSTAirDistHeuristic`,
     #       solve the `small_delivery_problem_with_money_cost` with it and print the results.
-    exit()  # TODO: remove!
+    astar_ex_29_2 = AStar(TruckDeliveriesMSTAirDistHeuristic)
+    astar_ex_29_2 = astar_ex_29_2.solve_problem(small_delivery_problem_with_money_cost)
+    print(astar_ex_29_2)
 
 
 def deliveries_truck_problem_with_astar_epsilon_experiments():
@@ -270,7 +274,9 @@ def deliveries_truck_problem_with_astar_epsilon_experiments():
     #       solve the `moderate_delivery_problem_with_distance_cost` with it and print the results.
     #       use focal_epsilon=0.03, and  max_focal_size=40.
     #       use within_focal_priority_function=within_focal_h_sum_priority_function
-    astarEpsilon = AStarEpsilon(TruckDeliveriesMSTAirDistHeuristic, within_focal_h_sum_priority_function, focal_epsilon=0.03, max_focal_size=40)
+    astarEpsilon = AStarEpsilon(TruckDeliveriesMSTAirDistHeuristic,
+                                within_focal_priority_function=within_focal_h_sum_priority_function,
+                                focal_epsilon=0.03, max_focal_size=40)
     res_astarEpsilon = astarEpsilon.solve_problem(moderate_delivery_problem_with_distance_cost)
     print(res_astarEpsilon)
 
