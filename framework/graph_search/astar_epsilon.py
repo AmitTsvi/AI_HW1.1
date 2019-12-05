@@ -95,11 +95,7 @@ class AStarEpsilon(AStar):
                 self.open.push_node(next_node)
 
         index_min = np.argmin(array_focal_priority_values)
-        node_to_expand = focal_list.pop(index_min)
-
-        #if self.max_nr_states_to_expand is not None and nr_expanded_states >= self.max_nr_states_to_expand:
-        #    exceeded_max_nr_expanded_states = True
-        #    break
+        node_to_expand = focal_list.pop(int(index_min))
 
         for next_node in focal_list:
             self.open.push_node(next_node)
