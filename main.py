@@ -291,7 +291,9 @@ def deliveries_truck_problem_anytime_astar_experiments():
     # TODO: create an instance of `AnytimeAStar` once with the `TruckDeliveriesMSTAirDistHeuristic`, with
     #       `max_nr_states_to_expand_per_iteration` set to 50, solve the
     #       `moderate_delivery_problem_with_distance_cost` with it and print the results.
-    exit()  # TODO: remove!
+    anytimeAStar_50 = AnytimeAStar(TruckDeliveriesMSTAirDistHeuristic, 50)
+    res_anytimeAStar_50 = anytimeAStar_50.solve_problem(moderate_delivery_problem_with_distance_cost)
+    print(res_anytimeAStar_50)
 
 
 def big_deliveries_truck_problem_with_non_acceptable_heuristic_and_anytime_astar_experiments():
@@ -305,7 +307,13 @@ def big_deliveries_truck_problem_with_non_acceptable_heuristic_and_anytime_astar
     # TODO: create an instance of `AnytimeAStar` once with the `TruckDeliveriesSumAirDistHeuristic`,
     #       and then with the `TruckDeliveriesMSTAirDistHeuristic`, both with `max_nr_states_to_expand_per_iteration`
     #       set to 400, solve the `big_delivery_problem_with_distance_cost` with it and print the results.
-    exit()  # TODO: remove!
+    anytimeAStar_400_1 = AnytimeAStar(TruckDeliveriesSumAirDistHeuristic, 400)
+    res_anytimeAStar_400_1 = anytimeAStar_400_1.solve_problem(big_delivery_problem_with_distance_cost)
+    print(res_anytimeAStar_400_1)
+
+    anytimeAStar_400_2 = AnytimeAStar(TruckDeliveriesMSTAirDistHeuristic, 400)
+    res_anytimeAStar_400_2 = anytimeAStar_400_1.solve_problem(big_delivery_problem_with_distance_cost)
+    print(res_anytimeAStar_400_2)
 
 
 def run_all_experiments():
