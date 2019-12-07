@@ -190,7 +190,7 @@ class DeliveriesTruckProblem(GraphProblem):
         assert isinstance(state_to_expand, DeliveriesTruckState)
         for delivery in self.get_deliveries_waiting_to_pick(state_to_expand):
             if self.problem_input.delivery_truck.max_nr_loaded_packages - \
-                    state_to_expand.get_total_nr_packages_loaded() <= delivery.nr_packages:
+                    state_to_expand.get_total_nr_packages_loaded() < delivery.nr_packages:
                 continue
             new_loaded = set(state_to_expand.loaded_deliveries)
             new_loaded.add(delivery)
