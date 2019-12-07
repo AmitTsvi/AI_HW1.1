@@ -88,7 +88,7 @@ class TruckDeliveriesSumAirDistHeuristic(HeuristicFunction):
         total_cost_of_greedily_built_path = 0
         current_junction = state.current_location
         all_junctions_in_remaining_truck_path.remove(state.current_location)
-        while all_junctions_in_remaining_truck_path:
+        while len(all_junctions_in_remaining_truck_path) != 0:
             closest = min(all_junctions_in_remaining_truck_path,
                           key=lambda x:
                           self.cached_air_distance_calculator.get_air_distance_between_junctions(current_junction, x))
@@ -141,4 +141,6 @@ class TruckDeliveriesMSTAirDistHeuristic(HeuristicFunction):
                            {'weight': self.cached_air_distance_calculator.get_air_distance_between_junctions(j1, j2)})
                           for j1 in junctions_for_edges
                           for j2 in junctions_for_edges if j1 != j2])
-        return nx.minimum_spanning_tree(g).size(weight='weight')
+        mst = nx.minimum_spanning_tree(g)
+        return sum(edge[2]['weight'] for edge in list(mst.edges(data=True)))
+        # return nx.minimum_spanning_tree(g).size(weight='weight')

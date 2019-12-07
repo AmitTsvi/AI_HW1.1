@@ -312,7 +312,7 @@ def big_deliveries_truck_problem_with_non_acceptable_heuristic_and_anytime_astar
     print(res_anytimeAStar_400_1)
 
     anytimeAStar_400_2 = AnytimeAStar(TruckDeliveriesMSTAirDistHeuristic, 400)
-    res_anytimeAStar_400_2 = anytimeAStar_400_1.solve_problem(big_delivery_problem_with_distance_cost)
+    res_anytimeAStar_400_2 = anytimeAStar_400_2.solve_problem(big_delivery_problem_with_distance_cost)
     print(res_anytimeAStar_400_2)
 
 
