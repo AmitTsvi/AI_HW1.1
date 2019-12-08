@@ -220,7 +220,7 @@ class DeliveriesTruckProblem(GraphProblem):
             return False
         if len(state.loaded_deliveries) != 0:
             return False
-        if state.current_location not in [delivery.drop_location for delivery in self.problem_input.deliveries]:
+        if state.current_location not in {delivery.drop_location for delivery in self.problem_input.deliveries}:
             return False
         return True
 
@@ -286,7 +286,8 @@ class DeliveriesTruckProblem(GraphProblem):
                 generated set.
             Note: This method can be implemented using a single line of code.
         """
-        return set(self.problem_input.deliveries).difference(state.loaded_deliveries, state.dropped_deliveries)
+        return set(self.problem_input.deliveries).difference(state.loaded_deliveries).\
+            difference(state.dropped_deliveries)
 
     def get_all_junctions_in_remaining_truck_path(self, state: DeliveriesTruckState) -> Set[Junction]:
         """
@@ -300,10 +301,11 @@ class DeliveriesTruckProblem(GraphProblem):
                 `list-comprehension` technique. Example: {i * 10 for i in range(100)} would create
                 a set of the items {0, 10, 20, 30, ..., 990}
         """
-        remaining_set = {delivery.pick_location for delivery in self.get_deliveries_waiting_to_pick(state)}
-        remaining_set = remaining_set.union({delivery.drop_location for delivery in state.loaded_deliveries})
-        remaining_set = remaining_set.union({state.current_location})
-        return remaining_set
+        current = {state.current_location}
+        not_picked_yet = {delivery.pick_location for delivery in self.get_deliveries_waiting_to_pick(state)}
+        not_picked_and_dropped_yet = {delivery.drop_location for delivery in self.get_deliveries_waiting_to_pick(state)}
+        not_dropped_yet = {delivery.drop_location for delivery in state.loaded_deliveries}
+        return current.union(not_picked_yet).union(not_picked_and_dropped_yet).union(not_dropped_yet)
 
 
 class TruckDeliveriesInnerMapProblemHeuristic(HeuristicFunction):

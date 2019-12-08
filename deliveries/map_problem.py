@@ -58,15 +58,6 @@ class MapProblem(GraphProblem):
         # Get the junction (in the map) that is represented by the state to expand.
         junction = self.streets_map[state_to_expand.junction_id]
 
-        for outgoing_link in junction.outgoing_links:
-            successor_state = outgoing_link.target
-            if self.road_cost_fn is None:
-                operator_cost = outgoing_link.distance
-            else:
-                operator_cost = self.road_cost_fn(outgoing_link)
-            yield OperatorResult(successor_state=MapState(successor_state), operator_cost=operator_cost)
-
-
         # TODO [Ex.10]:
         #  Read the documentation of this method in the base class `GraphProblem.expand_state_with_costs()`.
         #  Finish the implementation of this method.
@@ -81,6 +72,15 @@ class MapProblem(GraphProblem):
         #        have to specify the operator name here).
         #  Note: Generally, in order to check whether a variable is set to None you should use the expression:
         #        `my_variable_to_check is None`, and particularly do NOT use comparison (==).
+
+        for outgoing_link in junction.outgoing_links:
+            link_target = outgoing_link.target
+            if self.road_cost_fn is None:
+                operator_cost: float = outgoing_link.distance
+            else:
+                operator_cost: float = self.road_cost_fn(outgoing_link)
+
+            yield OperatorResult(successor_state=MapState(link_target), operator_cost=operator_cost)
 
     def is_goal(self, state: GraphProblemState) -> bool:
         """
