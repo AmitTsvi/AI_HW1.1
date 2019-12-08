@@ -68,21 +68,21 @@ class AStarEpsilon(AStar):
          method should be kept in the open queue at the end of this method, except
          for the extracted (and returned) node.
         """
-
         if self.open.is_empty():
             return None
         # finding the maximum expanding-priority of the FOCAL (=which is
         #          the min expanding-priority in open multiplied by (1 + eps))
-        new_open = set()
+        new_open = []
         min_open_expand_priority = self.open.peek_next_node().expanding_priority
         while self.open.__len__() != 0:
             curr_node = self.open.pop_next_node()
             if curr_node.expanding_priority < min_open_expand_priority:
                 min_open_expand_priority = curr_node.expanding_priority
-            new_open.add(curr_node)
+            new_open.append(curr_node)
         max_focal_expand_priority = min_open_expand_priority*(1 + self.focal_epsilon)
 
         #creating focal list
+        original_open = new_open.copy()
         focal_list = []
         array_focal_priority_values = []
         while new_open.__len__() != 0:
@@ -91,13 +91,12 @@ class AStarEpsilon(AStar):
                 focal_list.append(next_node)
                 priority_value = self.within_focal_priority_function(next_node, problem, self)
                 array_focal_priority_values.append(priority_value)
-            else:
-                self.open.push_node(next_node)
 
         index_min = np.argmin(array_focal_priority_values)
         node_to_expand = focal_list.pop(int(index_min))
 
-        for next_node in focal_list:
+        original_open.remove(node_to_expand)
+        for next_node in original_open:
             self.open.push_node(next_node)
 
         self.close.add_node(node_to_expand)
