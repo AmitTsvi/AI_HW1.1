@@ -87,7 +87,7 @@ def run_astar_for_weights_in_range(heuristic_type: HeuristicFunctionType, proble
     #  3. Call the function `plot_distance_and_expanded_wrt_weight_figure()`
     #     with these 3 generated lists.
 
-    w_array = np.linspace(0.5, 1, num=20)
+    w_array = np.linspace(0.5, 1, num=n)
     weights = []
     costs = []
     num_expanded = []

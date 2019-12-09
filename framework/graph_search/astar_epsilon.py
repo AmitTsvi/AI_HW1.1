@@ -83,6 +83,7 @@ class AStarEpsilon(AStar):
 
         #creating focal list
         original_open = new_open.copy()
+        new_open.reverse()
         focal_list = []
         array_focal_priority_values = []
         while new_open.__len__() != 0:
